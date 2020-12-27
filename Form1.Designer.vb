@@ -22,12 +22,9 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.lblKredit = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -52,7 +49,7 @@ Partial Class Form1
         '
         Me.lblKredit.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lblKredit.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblKredit.ForeColor = System.Drawing.SystemColors.ActiveCaption
+        Me.lblKredit.ForeColor = System.Drawing.SystemColors.AppWorkspace
         Me.lblKredit.Location = New System.Drawing.Point(3, 391)
         Me.lblKredit.Name = "lblKredit"
         Me.lblKredit.Size = New System.Drawing.Size(133, 59)
@@ -70,17 +67,13 @@ Partial Class Form1
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Label1"
         '
-        'Timer1
-        '
-        Me.Timer1.Enabled = True
-        Me.Timer1.Interval = 20
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
+        Me.BackColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(733, 450)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.DoubleBuffered = True
@@ -93,6 +86,5 @@ Partial Class Form1
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents lblKredit As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents Timer1 As System.Windows.Forms.Timer
 
 End Class

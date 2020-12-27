@@ -1,12 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" UseMySettingsClassName="true">
   <Profiles />
-  <Settings>
-    <Setting Name="LPT_DATA_ADDR" Type="System.String" Scope="User">
-      <Value Profile="(Default)">378</Value>
-    </Setting>
-    <Setting Name="LPT_CONTROL_ADDR" Type="System.String" Scope="User">
-      <Value Profile="(Default)">37A</Value>
-    </Setting>
-  </Settings>
+  <Settings />
 </SettingsFile>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<cfg>
+  <!-- parallel port configuration -->
+  <lpt_data_addr>0x378</lpt_data_addr>
+  <lpt_control_addr>0x37A</lpt_control_addr>
+  
+  <!-- control device KEYBOARD/LPT-->
+  <control_dev>KEYBOARD</control_dev>
+
+</cfg>
