@@ -19,6 +19,8 @@
                     eventRecieved(ControllerEvt.OK)
                 Case Keys.R
                     eventRecieved(ControllerEvt.COIN_ACCEPTED)
+                Case Keys.Q
+                    eventRecieved(ControllerEvt.A_EXIT)
             End Select
 
             e.Handled = True

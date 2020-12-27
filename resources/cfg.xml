@@ -3,7 +3,12 @@
   <!-- parallel port configuration -->
   <lpt_data_addr>0x378</lpt_data_addr>
   <lpt_control_addr>0x37A</lpt_control_addr>
-  
+
+  <lpt_ok>0x02</lpt_ok>
+  <lpt_cancel>0x01</lpt_cancel>
+  <lpt_up>0x04</lpt_up>
+  <lpt_down>0x08</lpt_down>
+  <lpt_coin_accept>0x40</lpt_coin_accept>
   <!-- control device KEYBOARD/LPT-->
   <control_dev>KEYBOARD</control_dev>
 

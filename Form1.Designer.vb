@@ -23,7 +23,7 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.lblKredit = New System.Windows.Forms.Label()
+        Me.lblCredit = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
@@ -34,28 +34,31 @@ Partial Class Form1
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 18.96317!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 81.03683!))
-        Me.TableLayoutPanel1.Controls.Add(Me.lblKredit, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.lblCredit, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.Label1, 1, 0)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 2
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 87.11111!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.88889!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(733, 450)
         Me.TableLayoutPanel1.TabIndex = 0
         '
-        'lblKredit
+        'lblCredit
         '
-        Me.lblKredit.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblKredit.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblKredit.ForeColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lblKredit.Location = New System.Drawing.Point(3, 391)
-        Me.lblKredit.Name = "lblKredit"
-        Me.lblKredit.Size = New System.Drawing.Size(133, 59)
-        Me.lblKredit.TabIndex = 0
-        Me.lblKredit.Text = "Kredit"
-        Me.lblKredit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblCredit.AutoEllipsis = True
+        Me.lblCredit.BackColor = System.Drawing.Color.FromArgb(CType(CType(47, Byte), Integer), CType(CType(2, Byte), Integer), CType(CType(225, Byte), Integer))
+        Me.lblCredit.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lblCredit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.lblCredit.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCredit.ForeColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lblCredit.Location = New System.Drawing.Point(3, 391)
+        Me.lblCredit.Name = "lblCredit"
+        Me.lblCredit.Size = New System.Drawing.Size(133, 59)
+        Me.lblCredit.TabIndex = 0
+        Me.lblCredit.Text = "Kredit"
+        Me.lblCredit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label1
         '
@@ -84,7 +87,7 @@ Partial Class Form1
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents lblKredit As System.Windows.Forms.Label
+    Friend WithEvents lblCredit As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
 
 End Class

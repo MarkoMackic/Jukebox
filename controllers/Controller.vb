@@ -10,6 +10,7 @@
             UP
             DOWN
             COIN_ACCEPTED
+            A_EXIT
         End Enum
 
 
