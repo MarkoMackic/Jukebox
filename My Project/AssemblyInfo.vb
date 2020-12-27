@@ -8,14 +8,14 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("MMJukeBox")> 
+<Assembly: AssemblyTitle("JukeBox")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("MMJukeBox")> 
+<Assembly: AssemblyCompany("DOT.COM D.O.O")> 
+<Assembly: AssemblyProduct("JukeBox")> 
 <Assembly: AssemblyCopyright("Copyright ©  2020")> 
 <Assembly: AssemblyTrademark("")> 
 
-<Assembly: ComVisible(False)>
+<Assembly: ComVisible(False)> 
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
 <Assembly: Guid("49aa0b4a-20a3-4b98-ad5f-905f72b419ff")> 
