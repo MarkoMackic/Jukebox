@@ -12,4 +12,8 @@
   <!-- control device KEYBOARD/LPT-->
   <control_dev>KEYBOARD</control_dev>
 
+  <background_image>resources/images/background.jpg</background_image>
+
+  <db_file>resources/DB.sdf</db_file> 
+  
 </cfg>
