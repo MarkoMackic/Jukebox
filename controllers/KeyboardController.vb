@@ -3,7 +3,8 @@
     Public Class KeyboardController
         Inherits Controller
 
-        Public Sub New(form As Form)
+        Public Sub New(ByVal form As Form)
+            form.KeyPreview = True
             AddHandler form.KeyUp, AddressOf KeyUp
         End Sub
 

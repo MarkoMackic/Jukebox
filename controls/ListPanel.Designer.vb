@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class DBPanel
+Partial Class ListPanel
     Inherits System.Windows.Forms.Panel
 
     'Control overrides dispose to clean up the component list.

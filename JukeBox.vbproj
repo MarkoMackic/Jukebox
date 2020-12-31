@@ -91,6 +91,9 @@
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>1830049.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -121,10 +124,16 @@
     <Compile Include="controllers\Controller.vb" />
     <Compile Include="controllers\KeyboardController.vb" />
     <Compile Include="controllers\ParallelPortController.vb" />
-    <Compile Include="controls\DBPanel.Designer.vb">
-      <DependentUpon>DBPanel.vb</DependentUpon>
+    <Compile Include="controls\ListPanel.Designer.vb">
+      <DependentUpon>ListPanel.vb</DependentUpon>
     </Compile>
-    <Compile Include="controls\DBPanel.vb">
+    <Compile Include="controls\ListPanel.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="controls\TblLayoutPanel.Designer.vb">
+      <DependentUpon>TblLayoutPanel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="controls\TblLayoutPanel.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Main.vb">
@@ -151,6 +160,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Settings.vb" />
+    <Compile Include="storage\ILevelItem.vb" />
+    <Compile Include="storage\SecondLevelItem.vb" />
+    <Compile Include="storage\Storage.vb" />
+    <Compile Include="utils\ListUtils.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Main.resx">
@@ -179,6 +192,7 @@
   <ItemGroup>
     <Content Include=".gitattributes" />
     <Content Include=".gitignore" />
+    <Content Include="1830049.ico" />
     <Content Include="resources\DB.sdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -250,6 +264,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

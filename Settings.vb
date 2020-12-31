@@ -3,7 +3,7 @@ Imports System.IO
 
 Public NotInheritable Class Settings
 
-     Private Shared ReadOnly _instance As New Lazy(Of Settings)(Function() New Settings(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication)
+    Private Shared ReadOnly _instance As New Lazy(Of Settings)(Function() New Settings(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication)
 
     Shared sMap As Dictionary(Of String, String) = New Dictionary(Of String, String)
 
