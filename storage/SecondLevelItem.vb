@@ -12,6 +12,12 @@ Public Class SecondLevelItem
 
     Private items As New Dictionary(Of String, SecondLevelItem), selectedIdx As Integer
 
+    Private audioVideoExt() As String = {"*.asf", "*.wma", "*.wmv", "*.wm", "*.asx", "*.wax", "*.wvx", "*.wmx", "*.wpl", "*.dvr-ms", "*.wdm", _
+                                         "*.avi", "*.mpg", "*.mpeg", "*.m1v", "*.mp2", "*.mp3", "*.mpa", "*.mpe", "*.m3u", "*.mid", "*.midi", _
+                                         "*.rmi", "*.aif", "*.aifc", "*.aiff", "*.au", "*.snd", "*.wav", "*.cda", "*.ivf", "*.wmz", "*.wms", _
+                                         "*.mov", "*.m4a", "*.mp4", "*.m4v", "*.mp4v", "*.3g2", "*.3gp2", "*.3gp", "*.3gpp", "*.aac", "*.adt", _
+                                         "*.adts", "*.m2ts", "*.flac"}
+
     Enum IType
         CATEGORY
         GROUP
@@ -51,7 +57,7 @@ Public Class SecondLevelItem
                 items(fName).updateWithDirData(d)
             Next
         ElseIf Me.type = IType.GROUP Then
-            For Each d As String In My.Computer.FileSystem.GetFiles(dir)
+            For Each d As String In My.Computer.FileSystem.GetFiles(dir, FileIO.SearchOption.SearchAllSubDirectories, audioVideoExt)
                 Dim fName As String = Path.GetFileName(d)
 
                 If (items.ContainsKey(fName) = False) Then
@@ -60,6 +66,8 @@ Public Class SecondLevelItem
 
                 items(fName).updateWithDirData(d)
             Next
+        ElseIf Me.type = IType.SONG Then
+            root.allSongs.Add(fPath)
         End If
 
     End Sub

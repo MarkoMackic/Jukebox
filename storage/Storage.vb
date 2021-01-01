@@ -24,6 +24,8 @@ Public Class Storage
             items(fName).updateWithDirData(d)
         Next
 
+        allSongs = ListUtils.Shuffle(allSongs)
+
         currentCtx = Me
     End Sub
 
@@ -37,9 +39,11 @@ Public Class Storage
             Environment.Exit(1)
         End If
 
-        Return allSongs.Item(allSongsIdx)
+        Dim item As String = allSongs.Item(allSongsIdx)
 
-        allSongsIdx = If(allSongsIdx + 1 > allSongs.Count, 0, allSongsIdx + 1)
+        allSongsIdx = If(allSongsIdx + 1 > allSongs.Count - 1, 0, allSongsIdx + 1)
+
+        Return item
     End Function
 
 
