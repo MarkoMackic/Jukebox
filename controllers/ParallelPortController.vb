@@ -1,4 +1,6 @@
-﻿Namespace Controllers
+﻿Imports System.Timers
+
+Namespace Controllers
 
     Public Class ParallelPortController
         Inherits Controller
@@ -23,8 +25,9 @@
             initialData = Inp32(LPTSettings.DATA_REG_ADDR)
             currentData = initialData
 
-            t1.Interval = 3
-            AddHandler t1.Tick, AddressOf PullLPTIn
+            t1.Interval = 1
+            t1.AutoReset = True
+            AddHandler t1.Elapsed, AddressOf PullLPTIn
             t1.Start()
         End Sub
 

@@ -185,6 +185,11 @@ Public Class Form1
     End Sub
 
     Private Sub CtrlEvt(ByVal ctrlEvt As ControllerEvt)
+        If Me.InvokeRequired Then
+            Invoke(Sub(ctlEvt) Me.CtrlEvt(ctlEvt), ctrlEvt)
+            Return
+        End If
+
         If ctrlEvt = ControllerEvt.A_EXIT Then
             appShutdown()
             Return
