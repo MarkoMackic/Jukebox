@@ -22,4 +22,5 @@
 
   <songs_per_coin>3</songs_per_coin>
 
+  <fullscreen>true</fullscreen>
 </cfg>
