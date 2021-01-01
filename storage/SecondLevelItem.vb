@@ -10,7 +10,7 @@ Public Class SecondLevelItem
 
     Private type As IType
 
-    Private items As New Dictionary(Of String, SecondLevelItem), selectedIdx As Integer
+    Public items As New Dictionary(Of String, SecondLevelItem), selectedIdx As Integer
 
     Private audioVideoExt() As String = {"*.asf", "*.wma", "*.wmv", "*.wm", "*.asx", "*.wax", "*.wvx", "*.wmx", "*.wpl", "*.dvr-ms", "*.wdm", _
                                          "*.avi", "*.mpg", "*.mpeg", "*.m1v", "*.mp2", "*.mp3", "*.mpa", "*.mpe", "*.m3u", "*.mid", "*.midi", _
@@ -58,7 +58,12 @@ Public Class SecondLevelItem
             Next
         ElseIf Me.type = IType.GROUP Then
             For Each d As String In My.Computer.FileSystem.GetFiles(dir, FileIO.SearchOption.SearchAllSubDirectories, audioVideoExt)
-                Dim fName As String = Path.GetFileName(d)
+
+                If root.checkSong(d) = False Then
+                    Continue For
+                End If
+
+                Dim fName As String = Path.GetFileNameWithoutExtension(d)
 
                 If (items.ContainsKey(fName) = False) Then
                     items(fName) = New SecondLevelItem(Me, fName, d, IType.SONG)

@@ -4,6 +4,7 @@ Imports JukeBox.Controllers.Controller
 Imports System.IO
 Imports System.Data.SqlServerCe
 Imports System.Drawing.Drawing2D
+Imports System.Data.SqlClient
 
 Public Class Form1
 
@@ -22,8 +23,13 @@ Public Class Form1
 
     Private currentOrder As New List(Of String)
 
-    Private t As New Timer
+    Private failedSongs As HashSet(Of String)
 
+    Private songTimeTracker As New Timer
+
+    Private Delegate Sub nextSong()
+
+    Private nxtSong As nextSong = AddressOf changeMedia
 
     Sub New()
         InitializeComponent()
@@ -41,6 +47,16 @@ Public Class Form1
         gbOrder.BackColor = Color.FromArgb(150, Color.DarkBlue)
         gbOrdered.BackColor = Color.FromArgb(150, Color.DarkBlue)
 
+        wmp.Visible = False
+        wmp.uiMode = "invisible"
+        wmp.windowlessVideo = True
+        wmp.settings.autoStart = True
+        wmp.settings.enableErrorDialogs = False
+
+
+        AddHandler wmp.MediaError, AddressOf WmpMediaError
+        AddHandler wmp.PlayStateChange, AddressOf WmpPlayStateChanged
+        AddHandler wmp.MediaChange, AddressOf WmpMediaChanged
     End Sub
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -48,8 +64,10 @@ Public Class Form1
         'Form settings 
         Me.BackgroundImage = Image.FromFile(Settings.getInst().getVal("background_image"))
 
-        wmp.Visible = False
-
+        If Settings.getInst().getVal("fullscreen") = "true" Then
+            Me.FormBorderStyle = Windows.Forms.FormBorderStyle.None
+            Me.WindowState = FormWindowState.Maximized
+        End If
 
         ' Db connection
 
@@ -57,18 +75,25 @@ Public Class Form1
 
         dbConn.Open()
 
+        ' Load failed songs
+
+        failedSongs = getFailedSongs(dbConn)
 
         ' LoadSongs 
 
-        store = Storage.getFromDirectory(Path.GetFullPath(Settings.getInst().getVal("music_library_location")))
+        store = Storage.getFromDirectory(Path.GetFullPath(Settings.getInst().getVal("music_library_location")), Function(p As String) Not failedSongs.Contains(p))
+
 
         ' Top List
+        loadTopList(store)
 
+        store.initialize(True)
         ' Song Selected handler
 
         AddHandler store.songSelected, AddressOf songSelected
 
-        store.initialize(True)
+
+        changeMedia()
 
         'Initilizing app state
         creditChange(0)
@@ -88,18 +113,77 @@ Public Class Form1
 
         AddHandler ctrlr.ControllerEvent, AddressOf CtrlEvt
 
+        songTimeTracker.Interval = 500
+        AddHandler songTimeTracker.Tick, AddressOf songTimeTrack
+        songTimeTracker.Start()
 
-        AddHandler wmp.MediaError, AddressOf WmpMediaError
-        AddHandler wmp.PlayStateChange, AddressOf WmpPlayStateChanged
-        AddHandler wmp.MediaChange, AddressOf WmpMediaChanged
 
     End Sub
+
+    Private Function getFailedSongs(ByVal dbC As SqlCeConnection) As HashSet(Of String)
+        Dim fSongs As New HashSet(Of String)
+
+        Dim query As New SqlCeCommand("SELECT * FROM failed_songs", dbC)
+
+        Using reader As SqlCeDataReader = query.ExecuteReader()
+            While (reader.Read())
+                fSongs.Add(reader.Item("path"))
+            End While
+        End Using
+
+        Return fSongs
+    End Function
+
 
     Private Sub creditChange(ByVal i As Integer)
         credit += i
         lblCredit.Text = "Kredit : " + credit.ToString()
     End Sub
 
+    Private Sub songTimeTrack()
+        If (wmp.playState = WMPLib.WMPPlayState.wmppsPlaying) Then
+            lblSongTime.Text = wmp.Ctlcontrols.currentPositionString + "/" + wmp.currentMedia.durationString
+
+        Else
+            lblSongTime.Text = ""
+        End If
+
+    End Sub
+
+    Private Sub loadTopList(ByVal store As Storage)
+        Dim topList As SecondLevelItem = New SecondLevelItem(store, "Top lista", "", SecondLevelItem.IType.GROUP)
+
+        Dim sqlComm1 As New SqlCeCommand("SELECT * FROM stats ORDER BY repetitions DESC", dbConn)
+
+        Using res As SqlCeDataReader = sqlComm1.ExecuteReader()
+
+            While (res.Read())
+                Dim p As String = res.Item("path")
+                Dim fName As String = Path.GetFileNameWithoutExtension(p)
+                topList.items.Add(fName, New SecondLevelItem(topList, fName, p, SecondLevelItem.IType.SONG))
+            End While
+
+
+        End Using
+
+        store.items.Add("Top lista", topList)
+    End Sub
+
+    Private Sub addFailedSong(ByVal path As String)
+        Dim failedSongs As New SqlCeCommand("SELECT * FROM failed_songs WHERE path =  @path", dbConn)
+        failedSongs.Parameters.Add("@path", path)
+
+        Using results As SqlCeDataReader = failedSongs.ExecuteReader()
+            While (results.Read())
+                Return
+            End While
+
+            Dim addToFailedSongs As New SqlCeCommand("INSERT INTO failed_songs (path) VALUES (@path)", dbConn)
+            addToFailedSongs.Parameters.Add("@path", path)
+            addToFailedSongs.ExecuteNonQuery()
+        End Using
+
+    End Sub
 
     Private Sub CtrlEvt(ByVal ctrlEvt As ControllerEvt)
         If ctrlEvt = ControllerEvt.A_EXIT Then
@@ -136,28 +220,39 @@ Public Class Form1
     End Sub
 
     Private Sub appShutdown()
+        dbConn.Close()
+        songTimeTracker.Stop()
         Me.Close()
     End Sub
 
 
-    Private Sub changeMedia()
-        If (queuedSongs.Count > 0) Then
-            wmp.URL = queuedSongs.Dequeue()
+    Private Sub changeMedia(Optional ByVal url As String = Nothing)
+        If Not url Is Nothing Then
+            wmp.URL = url
+            Return
         End If
 
-        wmp.URL = store.getRandomSong()
+        If (queuedSongs.Count > 0) Then
+            wmp.URL = queuedSongs.Dequeue()
+            Return
+        End If
+
+        Dim a As String = store.getRandomSong()
+
+        wmp.URL = a
     End Sub
 
 
 
     Private Sub WmpPlayStateChanged(ByVal sender As Object, ByVal e As AxWMPLib._WMPOCXEvents_PlayStateChangeEvent)
         If e.newState = WMPLib.WMPPlayState.wmppsMediaEnded Or e.newState = WMPLib.WMPPlayState.wmppsStopped Then
-            changeMedia()
+            Me.BeginInvoke(nxtSong)
         End If
     End Sub
 
-    Private Sub WmpMediaError(ByVal sender As Object, ByVal e As AxWMPLib._WMPOCXEvents_MediaErrorEvent)
-
+    Public Sub WmpMediaError(ByVal sender As Object, ByVal e As AxWMPLib._WMPOCXEvents_MediaErrorEvent)
+        addFailedSong(wmp.URL)
+        Me.BeginInvoke(nxtSong)
     End Sub
 
     Private Sub WmpMediaChanged(ByVal sender As Object, ByVal e As AxWMPLib._WMPOCXEvents_MediaChangeEvent)
@@ -171,11 +266,8 @@ Public Class Form1
     End Sub
 
     Private Sub songSelected(ByVal path As String)
-        If (currentOrder.Contains(path)) Then
-
-        End If
-
-
+        MsgBox(path)
+        changeMedia(path)
     End Sub
 
 End Class

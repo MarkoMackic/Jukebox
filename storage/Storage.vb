@@ -4,6 +4,9 @@
 Public Class Storage
     Implements ILevelItem
 
+    Delegate Function isSongOk(ByVal path As String) As Boolean
+
+    Private songIsOk As isSongOk = Nothing
 
     Public items As New Dictionary(Of String, SecondLevelItem), selectedIdx As Integer = 0
 
@@ -13,7 +16,10 @@ Public Class Storage
 
     Public Event songSelected(ByVal path As String)
 
-    Private Sub New(ByVal f As String)
+    Private Sub New(ByVal f As String, ByVal songOk As isSongOk)
+
+        songIsOk = songOk
+
         For Each d As String In My.Computer.FileSystem.GetDirectories(f)
             Dim fName As String = Path.GetFileName(d)
 
@@ -29,8 +35,8 @@ Public Class Storage
         currentCtx = Me
     End Sub
 
-    Public Shared Function getFromDirectory(ByVal f As String) As Storage
-        Return New Storage(f)
+    Public Shared Function getFromDirectory(ByVal f As String, Optional ByVal songOk As isSongOk = Nothing) As Storage
+        Return New Storage(f, songOk)
     End Function
 
     Public Function getRandomSong() As String
@@ -83,5 +89,13 @@ Public Class Storage
 
     Public Function getParent() As ILevelItem Implements ILevelItem.getParent
         Return Me
+    End Function
+
+    Public Function checkSong(ByVal path As String)
+        If songIsOk = Nothing Then
+            Return True
+        End If
+
+        Return songIsOk.Invoke(path)
     End Function
 End Class
