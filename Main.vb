@@ -13,15 +13,11 @@ Public Class Form1
 
     Public store As Storage
 
-    Private allSongsIdx = 0
-
     Private dbConn As SqlCeConnection = Nothing
 
-    Private currentListPanel As ListPanel
+    Private queuedSongs As New Queue(Of Song)
 
-    Private queuedSongs As New Queue(Of String)
-
-    Private currentOrder As New List(Of String)
+    Private currentOrder As New List(Of Song)
 
     Private failedSongs As HashSet(Of String)
 
@@ -53,10 +49,13 @@ Public Class Form1
         wmp.settings.autoStart = True
         wmp.settings.enableErrorDialogs = False
 
+        orderList.Items = New List(Of String)
+        orderedList.Items = New List(Of String)
 
         AddHandler wmp.MediaError, AddressOf WmpMediaError
         AddHandler wmp.PlayStateChange, AddressOf WmpPlayStateChanged
         AddHandler wmp.MediaChange, AddressOf WmpMediaChanged
+        AddHandler Me.FormClosing, AddressOf appShutdown
     End Sub
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -191,7 +190,7 @@ Public Class Form1
             Return
         ElseIf ctrlEvt = ControllerEvt.COIN_ACCEPTED Then
             creditChange(1)
-            'Return
+            Return
         End If
 
         If credit = 0 Then
@@ -219,10 +218,12 @@ Public Class Form1
 
     End Sub
 
-    Private Sub appShutdown()
+    Private Sub appShutdown(Optional ByVal sender As Object = Nothing, Optional ByVal e As FormClosingEventArgs = Nothing)
         dbConn.Close()
         songTimeTracker.Stop()
-        Me.Close()
+        If e Is Nothing Then
+            Me.Close()
+        End If
     End Sub
 
 
@@ -233,19 +234,18 @@ Public Class Form1
         End If
 
         If (queuedSongs.Count > 0) Then
-            wmp.URL = queuedSongs.Dequeue()
+            wmp.URL = queuedSongs.Dequeue().getPath()
+            updateQueuedSongsDisplay()
             Return
         End If
 
-        Dim a As String = store.getRandomSong()
-
-        wmp.URL = a
+        wmp.URL = store.getRandomSong()
     End Sub
 
 
 
     Private Sub WmpPlayStateChanged(ByVal sender As Object, ByVal e As AxWMPLib._WMPOCXEvents_PlayStateChangeEvent)
-        If e.newState = WMPLib.WMPPlayState.wmppsMediaEnded Or e.newState = WMPLib.WMPPlayState.wmppsStopped Then
+        If e.newState = WMPLib.WMPPlayState.wmppsMediaEnded Then
             Me.BeginInvoke(nxtSong)
         End If
     End Sub
@@ -256,7 +256,7 @@ Public Class Form1
     End Sub
 
     Private Sub WmpMediaChanged(ByVal sender As Object, ByVal e As AxWMPLib._WMPOCXEvents_MediaChangeEvent)
-        lblCurrentAction.Text = "Trenutna pjesma: " + Path.GetFileName(wmp.URL)
+        lblCurrentAction.Text = "Trenutna pjesma: " + Path.GetFileNameWithoutExtension(wmp.URL)
     End Sub
 
     Private Sub ItemChanged(ByVal idx As Integer, ByVal val As String) Handles catList.ItemSelected, groupsAndSongsList.ItemSelected
@@ -265,9 +265,32 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub updateQueuedSongsDisplay()
+        orderedList.Items = Array.ConvertAll(queuedSongs.ToArray(), Function(song As Song) song.getDisplay()).ToList()
+    End Sub
+
     Private Sub songSelected(ByVal path As String)
-        MsgBox(path)
-        changeMedia(path)
+
+        If currentOrder.FindAll(Function(s) s.getPath = path).Count > 0 Then
+            Return
+        End If
+
+        currentOrder.Add(New Song(path))
+
+        If (currentOrder.Count Mod Integer.Parse(Settings.getInst().getVal("songs_per_coin")) = 0) Then
+            creditChange(-1)
+        End If
+
+        If credit = 0 Then
+            For Each song As Song In currentOrder
+                queuedSongs.Enqueue(song)
+                updateQueuedSongsDisplay()
+            Next
+            currentOrder.Clear()
+            store.initialize(True)
+        End If
+
+        orderList.Items = currentOrder.ConvertAll(Function(s) s.getDisplay())
     End Sub
 
 End Class

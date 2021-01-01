@@ -166,6 +166,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Settings.vb" />
+    <Compile Include="Song.vb" />
     <Compile Include="storage\ILevelItem.vb" />
     <Compile Include="storage\SecondLevelItem.vb" />
     <Compile Include="storage\Storage.vb" />
