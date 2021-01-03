@@ -18,13 +18,13 @@
 
   <interrupt_random_no_orders>false</interrupt_random_no_orders>
 
-  <music_library_location>D:\Downloads\JB M</music_library_location>
+  <music_library_location>DIR</music_library_location>
 
-  <!--<screen_saver_time>120000</screen_saver_time>-->
+  <screen_saver_enabled>false</screen_saver_enabled>
 
-  <screen_saver_time>10000</screen_saver_time>
+  <screen_saver_time>120000</screen_saver_time>
 
-  <screen_saver_images_location>C:\Users\Marko Mackic\Desktop</screen_saver_images_location>
+  <screen_saver_images_location>DIR</screen_saver_images_location>
 
   <songs_per_coin>3</songs_per_coin>
 
