@@ -30,16 +30,11 @@ Partial Class Form1
         Me.lblSongTime = New System.Windows.Forms.Label()
         Me.lblCurrentAction = New System.Windows.Forms.Label()
         Me.groupsAndSongsList = New JukeBox.ListPanel()
-        Me.TblLayoutPanel1 = New JukeBox.TblLayoutPanel()
-        Me.gbOrdered = New JukeBox.DBGroupBox()
-        Me.orderList = New JukeBox.ListPanel()
         Me.gbOrder = New JukeBox.DBGroupBox()
         Me.orderedList = New JukeBox.ListPanel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.catList.SuspendLayout()
         CType(Me.wmp, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TblLayoutPanel1.SuspendLayout()
-        Me.gbOrdered.SuspendLayout()
         Me.gbOrder.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -48,15 +43,15 @@ Partial Class Form1
         Me.TableLayoutPanel1.BackColor = System.Drawing.Color.Transparent
         Me.TableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
         Me.TableLayoutPanel1.ColumnCount = 3
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.gbOrder, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.lblCredit, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.catList, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.lblSongTime, 2, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.lblCurrentAction, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.groupsAndSongsList, 1, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.TblLayoutPanel1, 2, 0)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
@@ -75,7 +70,7 @@ Partial Class Form1
         Me.lblCredit.ForeColor = System.Drawing.SystemColors.AppWorkspace
         Me.lblCredit.Location = New System.Drawing.Point(4, 518)
         Me.lblCredit.Name = "lblCredit"
-        Me.lblCredit.Size = New System.Drawing.Size(223, 59)
+        Me.lblCredit.Size = New System.Drawing.Size(131, 59)
         Me.lblCredit.TabIndex = 0
         Me.lblCredit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -97,7 +92,7 @@ Partial Class Form1
         Me.catList.SelectedIdx = 0
         Me.catList.ShowItemsFromCenter = True
         Me.catList.ShownItemsCount = 8
-        Me.catList.Size = New System.Drawing.Size(223, 510)
+        Me.catList.Size = New System.Drawing.Size(131, 510)
         Me.catList.TabIndex = 3
         '
         'wmp
@@ -114,9 +109,9 @@ Partial Class Form1
         Me.lblSongTime.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lblSongTime.Font = New System.Drawing.Font("Broadway", 12.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSongTime.ForeColor = System.Drawing.Color.Moccasin
-        Me.lblSongTime.Location = New System.Drawing.Point(693, 518)
+        Me.lblSongTime.Location = New System.Drawing.Point(601, 518)
         Me.lblSongTime.Name = "lblSongTime"
-        Me.lblSongTime.Size = New System.Drawing.Size(223, 59)
+        Me.lblSongTime.Size = New System.Drawing.Size(315, 59)
         Me.lblSongTime.TabIndex = 4
         Me.lblSongTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
@@ -125,7 +120,7 @@ Partial Class Form1
         Me.lblCurrentAction.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lblCurrentAction.Font = New System.Drawing.Font("Broadway", 12.0!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblCurrentAction.ForeColor = System.Drawing.Color.Moccasin
-        Me.lblCurrentAction.Location = New System.Drawing.Point(234, 518)
+        Me.lblCurrentAction.Location = New System.Drawing.Point(142, 518)
         Me.lblCurrentAction.Name = "lblCurrentAction"
         Me.lblCurrentAction.Size = New System.Drawing.Size(452, 59)
         Me.lblCurrentAction.TabIndex = 5
@@ -140,7 +135,7 @@ Partial Class Form1
         Me.groupsAndSongsList.ItemBorderWidth = 3
         Me.groupsAndSongsList.ItemForegroundColor = System.Drawing.Color.White
         Me.groupsAndSongsList.Items = CType(resources.GetObject("groupsAndSongsList.Items"), System.Collections.Generic.List(Of String))
-        Me.groupsAndSongsList.Location = New System.Drawing.Point(241, 11)
+        Me.groupsAndSongsList.Location = New System.Drawing.Point(149, 11)
         Me.groupsAndSongsList.Margin = New System.Windows.Forms.Padding(10)
         Me.groupsAndSongsList.MaxItemHeight = 90
         Me.groupsAndSongsList.Name = "groupsAndSongsList"
@@ -150,65 +145,16 @@ Partial Class Form1
         Me.groupsAndSongsList.Size = New System.Drawing.Size(438, 496)
         Me.groupsAndSongsList.TabIndex = 6
         '
-        'TblLayoutPanel1
-        '
-        Me.TblLayoutPanel1.ColumnCount = 1
-        Me.TblLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TblLayoutPanel1.Controls.Add(Me.gbOrdered, 0, 1)
-        Me.TblLayoutPanel1.Controls.Add(Me.gbOrder, 0, 0)
-        Me.TblLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TblLayoutPanel1.Location = New System.Drawing.Point(693, 4)
-        Me.TblLayoutPanel1.Name = "TblLayoutPanel1"
-        Me.TblLayoutPanel1.RowCount = 2
-        Me.TblLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70.0!))
-        Me.TblLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30.0!))
-        Me.TblLayoutPanel1.Size = New System.Drawing.Size(223, 510)
-        Me.TblLayoutPanel1.TabIndex = 7
-        '
-        'gbOrdered
-        '
-        Me.gbOrdered.BackColor = System.Drawing.Color.Transparent
-        Me.gbOrdered.Controls.Add(Me.orderList)
-        Me.gbOrdered.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gbOrdered.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.gbOrdered.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbOrdered.ForeColor = System.Drawing.SystemColors.ControlLight
-        Me.gbOrdered.Location = New System.Drawing.Point(3, 360)
-        Me.gbOrdered.Name = "gbOrdered"
-        Me.gbOrdered.Size = New System.Drawing.Size(217, 147)
-        Me.gbOrdered.TabIndex = 1
-        Me.gbOrdered.TabStop = False
-        Me.gbOrdered.Text = "Narudžba"
-        '
-        'orderList
-        '
-        Me.orderList.DisplayItemRectangular = True
-        Me.orderList.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.orderList.ItemBackgroundColor = System.Drawing.Color.DarkBlue
-        Me.orderList.ItemBorderColor = System.Drawing.Color.Black
-        Me.orderList.ItemBorderWidth = 3
-        Me.orderList.ItemForegroundColor = System.Drawing.Color.White
-        Me.orderList.Items = CType(resources.GetObject("orderList.Items"), System.Collections.Generic.List(Of String))
-        Me.orderList.Location = New System.Drawing.Point(3, 27)
-        Me.orderList.Margin = New System.Windows.Forms.Padding(10)
-        Me.orderList.MaxItemHeight = 90
-        Me.orderList.Name = "orderList"
-        Me.orderList.SelectedIdx = 0
-        Me.orderList.ShowItemsFromCenter = False
-        Me.orderList.ShownItemsCount = 7
-        Me.orderList.Size = New System.Drawing.Size(211, 117)
-        Me.orderList.TabIndex = 7
-        '
         'gbOrder
         '
         Me.gbOrder.Controls.Add(Me.orderedList)
         Me.gbOrder.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbOrder.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbOrder.ForeColor = System.Drawing.SystemColors.ControlLight
-        Me.gbOrder.Location = New System.Drawing.Point(3, 3)
+        Me.gbOrder.Location = New System.Drawing.Point(601, 4)
         Me.gbOrder.Name = "gbOrder"
-        Me.gbOrder.Size = New System.Drawing.Size(217, 351)
-        Me.gbOrder.TabIndex = 0
+        Me.gbOrder.Size = New System.Drawing.Size(315, 510)
+        Me.gbOrder.TabIndex = 7
         Me.gbOrder.TabStop = False
         Me.gbOrder.Text = "Naručene"
         '
@@ -228,7 +174,7 @@ Partial Class Form1
         Me.orderedList.SelectedIdx = 0
         Me.orderedList.ShowItemsFromCenter = False
         Me.orderedList.ShownItemsCount = 20
-        Me.orderedList.Size = New System.Drawing.Size(211, 321)
+        Me.orderedList.Size = New System.Drawing.Size(309, 480)
         Me.orderedList.TabIndex = 7
         '
         'Form1
@@ -246,8 +192,6 @@ Partial Class Form1
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.catList.ResumeLayout(False)
         CType(Me.wmp, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TblLayoutPanel1.ResumeLayout(False)
-        Me.gbOrdered.ResumeLayout(False)
         Me.gbOrder.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -258,11 +202,8 @@ Partial Class Form1
     Friend WithEvents lblCurrentAction As System.Windows.Forms.Label
     Friend WithEvents TableLayoutPanel1 As JukeBox.TblLayoutPanel
     Friend WithEvents groupsAndSongsList As JukeBox.ListPanel
-    Friend WithEvents TblLayoutPanel1 As JukeBox.TblLayoutPanel
-    Friend WithEvents orderList As JukeBox.ListPanel
-    Friend WithEvents orderedList As JukeBox.ListPanel
     Friend WithEvents wmp As AxWMPLib.AxWindowsMediaPlayer
-    Friend WithEvents gbOrdered As JukeBox.DBGroupBox
     Friend WithEvents gbOrder As JukeBox.DBGroupBox
+    Friend WithEvents orderedList As JukeBox.ListPanel
 
 End Class

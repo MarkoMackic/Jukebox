@@ -5,6 +5,7 @@ Imports System.IO
 Imports System.Data.SqlServerCe
 Imports System.Drawing.Drawing2D
 Imports System.Data.SqlClient
+Imports System.Linq
 
 Public Class Form1
 
@@ -17,8 +18,6 @@ Public Class Form1
 
     Private queuedSongs As New Queue(Of Song)
 
-    Private currentOrder As New List(Of Song)
-
     Private failedSongs As HashSet(Of String)
 
     Private songTimeTracker As New Timer
@@ -26,6 +25,8 @@ Public Class Form1
     Private Delegate Sub nextSong()
 
     Private nxtSong As nextSong = AddressOf changeMedia
+
+    Private ssTimer As Timer = New Timer()
 
     Sub New()
         InitializeComponent()
@@ -41,7 +42,6 @@ Public Class Form1
         lblCurrentAction.BackColor = Color.FromArgb(150, Color.DarkBlue)
         lblSongTime.BackColor = Color.FromArgb(150, Color.DarkBlue)
         gbOrder.BackColor = Color.FromArgb(150, Color.DarkBlue)
-        gbOrdered.BackColor = Color.FromArgb(150, Color.DarkBlue)
 
         wmp.Visible = False
         wmp.uiMode = "invisible"
@@ -49,9 +49,14 @@ Public Class Form1
         wmp.settings.autoStart = True
         wmp.settings.enableErrorDialogs = False
 
-        orderList.Items = New List(Of String)
         orderedList.Items = New List(Of String)
 
+        If Settings.getInst().getVal("screen_saver_enabled") = "true" Then
+            ssTimer.Interval = Integer.Parse(Settings.getInst().getVal("screen_saver_time"))
+            ssTimer.Start()
+        End If
+
+        AddHandler ssTimer.Tick, AddressOf showScreenSaver
         AddHandler wmp.MediaError, AddressOf WmpMediaError
         AddHandler wmp.PlayStateChange, AddressOf WmpPlayStateChanged
         AddHandler wmp.MediaChange, AddressOf WmpMediaChanged
@@ -61,7 +66,6 @@ Public Class Form1
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
         'Form settings 
-        Me.BackgroundImage = Image.FromFile(Settings.getInst().getVal("background_image"))
 
         If Settings.getInst().getVal("fullscreen") = "true" Then
             Me.FormBorderStyle = Windows.Forms.FormBorderStyle.None
@@ -117,6 +121,19 @@ Public Class Form1
         songTimeTracker.Start()
 
 
+    End Sub
+
+    Private Sub showScreenSaver()
+        ssTimer.Stop()
+        ScreenSaver.Show()
+    End Sub
+
+    Public Sub closeScreenSaver()
+        If Application.OpenForms.OfType(Of ScreenSaver).Any Then
+            ScreenSaver.Close()
+        End If
+        ssTimer.Stop()
+        ssTimer.Start()
     End Sub
 
     Private Function getFailedSongs(ByVal dbC As SqlCeConnection) As HashSet(Of String)
@@ -190,15 +207,13 @@ Public Class Form1
             Return
         End If
 
+        closeScreenSaver()
+
         If ctrlEvt = ControllerEvt.A_EXIT Then
             appShutdown()
             Return
         ElseIf ctrlEvt = ControllerEvt.COIN_ACCEPTED Then
-            creditChange(1)
-            Return
-        End If
-
-        If credit = 0 Then
+            creditChange(1 * Integer.Parse(Settings.getInst().getVal("songs_per_coin")))
             Return
         End If
 
@@ -274,28 +289,45 @@ Public Class Form1
         orderedList.Items = Array.ConvertAll(queuedSongs.ToArray(), Function(song As Song) song.getDisplay()).ToList()
     End Sub
 
+    Private Sub updateTopList(ByVal path As String)
+        Dim failedSongs As New SqlCeCommand("SELECT * FROM stats WHERE path =  @path", dbConn)
+        failedSongs.Parameters.Add("@path", path)
+
+        Using results As SqlCeDataReader = failedSongs.ExecuteReader()
+            While (results.Read())
+                Dim updateFailedSongs As New SqlCeCommand("UPDATE stats SET repetitions=repetitions+1 WHERE path = @path", dbConn)
+                updateFailedSongs.Parameters.Add("@path", path)
+                updateFailedSongs.ExecuteNonQuery()
+                Return
+            End While
+
+            Dim addToFailedSongs As New SqlCeCommand("INSERT INTO stats (path, repetitions) VALUES (@path, 1)", dbConn)
+            addToFailedSongs.Parameters.Add("@path", path)
+            addToFailedSongs.ExecuteNonQuery()
+        End Using
+    End Sub
+
     Private Sub songSelected(ByVal path As String)
 
-        If currentOrder.FindAll(Function(s) s.getPath = path).Count > 0 Then
+        If credit = 0 Then
             Return
         End If
 
-        currentOrder.Add(New Song(path))
-
-        If (currentOrder.Count Mod Integer.Parse(Settings.getInst().getVal("songs_per_coin")) = 0) Then
-            creditChange(-1)
+        If queuedSongs.ToList().FindAll(Function(s) s.getPath = path).Count > 0 Then
+            Return
         End If
+
+        updateTopList(path)
+
+        queuedSongs.Enqueue(New Song(path))
+
+        updateQueuedSongsDisplay()
+
+        creditChange(-1)
 
         If credit = 0 Then
-            For Each song As Song In currentOrder
-                queuedSongs.Enqueue(song)
-                updateQueuedSongsDisplay()
-            Next
-            currentOrder.Clear()
             store.initialize(True)
         End If
-
-        orderList.Items = currentOrder.ConvertAll(Function(s) s.getDisplay())
     End Sub
 
 End Class
